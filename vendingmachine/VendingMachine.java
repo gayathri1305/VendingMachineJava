@@ -15,7 +15,8 @@ public class VendingMachine {
         while (true) {
             menu();
             userOption();
-            System.out.println("\nVending Machine Amount = " + this.currentBalance);
+            viewVendingAmount();
+            //System.out.println("\nVending Machine Amount = " + this.currentBalance);
         }
     }
 
@@ -33,79 +34,78 @@ public class VendingMachine {
         System.out.println("Enter item ID: ");
         Scanner sc = new Scanner(System.in);
         int id = sc.nextInt();
+
+        //check enter valid amount
+        if (id < 1 || id > 5) {
+            System.out.println("Please enter the correct id");
+            vendingLoop();
+        }
+
         System.out.println("Enter Amount: ");
         String amount_str = sc.next();
         Double amount = Double.parseDouble(amount_str);
-        dispenceItem(id, amount);
+        setItem(id, amount);
     }
 
-    public void dispenceItem(int id, double amount) {
-        if (id < 1 || id > 5) {
-            System.out.println("Please enter valid id");
-            menu();
-        }
+    public void setItem(int id, double amount) {
+        String item=null;
+        double item_amount=0;
 
+        // set the amount and item according to id
         if (id == 1) {
-            if (amount < 10) {
-                incorrectAmount(10);
-            }
-            currentBalance += 10;
-            if (amount > 10) {
-                System.out.println("Returning balance : " + (amount - 10));
-            }
-            System.out.println("Dispensing Tea");
+            item = "Tea";
+            item_amount=10;
         }
-
         if (id == 2) {
-            if (amount < 20) {
-                incorrectAmount(20);
-            }
-            currentBalance += 20;
-            if (amount > 20) {
-                System.out.println("Returning balance : " + (amount - 20));
-            }
-            System.out.println("Dispensing Coffee");
+            item = "Coffee";
+            item_amount=20;
         }
-
         if (id == 3) {
-            if (amount < 50) {
-                incorrectAmount(50);
-            }
-            currentBalance += 50;
-            if (amount > 50) {
-                System.out.println("Returning balance : " + (amount - 50));
-            }
-                System.out.println("Dispensing Coke");
+            item = "Coke";
+            item_amount=50;
         }
-
         if (id == 4) {
-            if (amount < 20.50) {
-                incorrectAmount(20.50);
-            }
-            currentBalance += 20.50;
-            if (amount > 20.50) {
-                System.out.println("Returning balance : " + (amount - 20.50));
-            }
-            System.out.println("Dispensing Lays");
-
+            item = "Lays";
+            item_amount=20.50;
         }
-
         if (id == 5) {
-            if (amount < 100) {
-                incorrectAmount(100);
-            }
-            currentBalance += 100;
-            if (amount > 100) {
-                System.out.println("Returning balance : " + (amount - 100));
-            }
-            System.out.println("Dispensing Cake");
-
+            item = "Cake";
+            item_amount=100;
         }
+        dispenceItem(id,amount,item,item_amount);
     }
+
+    public void dispenceItem(int id, double amount,String item,double item_amount){
+
+            if (amount < item_amount) {
+                incorrectAmount(item_amount);
+            }
+            currentBalance += item_amount;
+            if (amount > item_amount) {
+                System.out.println("Returning balance : " + (amount - item_amount));
+            }
+            System.out.println("Dispensing "+ item);
+        }
 
         public void incorrectAmount ( double amt){
             System.out.println("Enter greater or equal to " + amt);
             vendingLoop();
+        }
+
+        public void viewVendingAmount(){
+            System.out.println("\nPlease give the choice for viewing vending machine amount:(Y/N) ");
+            Scanner sc= new Scanner(System.in);
+            String choice=sc.next();
+            char c=choice.charAt(0);
+            if(c=='Y'|| c=='y'){
+                System.out.println("\nVending Machine Amount = " + this.currentBalance);
+            }
+            else if(c=='N'|| c=='n'){
+
+            }
+            else{
+                System.out.println("Please give the correct choice: ");
+            }
         }
 
     }
