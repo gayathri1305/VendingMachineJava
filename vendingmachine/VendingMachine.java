@@ -1,10 +1,16 @@
 package vendingmachine;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.Scanner;
 
 public class VendingMachine {
     //vending machine amount as class variable
     double currentBalance = 0;
+    LinkedList<String> list= new LinkedList<>();
 
     public static void main(String[] args) {
         VendingMachine v = new VendingMachine();
@@ -16,6 +22,7 @@ public class VendingMachine {
             menu();
             userOption();
             viewVendingAmount();
+            viewTransactionHistory();
             //System.out.println("\nVending Machine Amount = " + this.currentBalance);
         }
     }
@@ -81,10 +88,16 @@ public class VendingMachine {
                 incorrectAmount(item_amount);
             }
             currentBalance += item_amount;
+            double balance=amount - item_amount;
             if (amount > item_amount) {
-                System.out.println("Returning balance : " + (amount - item_amount));
+                System.out.println("Returning balance : " + balance);
             }
             System.out.println("Dispensing "+ item);
+            // get timestamp
+            DateFormat df =new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+            Date date =new Date();
+            String currentDateTime=df.format(date);
+            transactionHistory(id,amount,item,item_amount,balance,currentDateTime);
         }
 
         public void incorrectAmount ( double amt){
@@ -104,8 +117,41 @@ public class VendingMachine {
 
             }
             else{
-                System.out.println("Please give the correct choice: ");
+                System.out.println("Entered choice is incorrect.");
             }
+        }
+        public void viewTransactionHistory(){
+            System.out.println("\nPlease give the choice for viewing Transaction History:(Y/N) ");
+            Scanner sc= new Scanner(System.in);
+            String choice=sc.next();
+            char c=choice.charAt(0);
+            if(c=='Y'|| c=='y'){
+                System.out.println("\nThe Transaction History is:");
+                for(String trans:list){
+                    System.out.println(trans);
+                }
+
+            }
+            else if(c=='N'|| c=='n'){
+
+            }
+            else{
+                System.out.println("Entered choice is incorrect.");
+            }
+        }
+
+        public void transactionHistory(int id, double amount,String item,double item_amount,double balance,String date){
+
+            StringBuilder sb=new StringBuilder();
+            sb.append("Transaction time: "+ date +"; \t"+
+                        "Item Id: " + id +"; \t"+
+                        "Item: "+ item +"; \t"+
+                        "Amount enter by user: " + amount +"; \t"+
+                        "Balance returned to user: "+ balance +"; \t"+
+                        "Amount in vending machine: "+ currentBalance);
+
+            list.add(sb.toString());
+
         }
 
     }
